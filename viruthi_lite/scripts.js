@@ -590,7 +590,14 @@ function updateNWAssetCharts(pVal, aVal, rVal, dVal) {
 }
 
 function exportData() {
-    const data = { portfolio, networthItems, strategy: currentStrategy, history: appHistory, date: new Date().toISOString() };
+    const data = { 
+        portfolio, 
+        networthItems, 
+        strategy: currentStrategy, 
+        customStrategy: STRATEGY_PRESETS.custom,
+        history: appHistory, 
+        date: new Date().toISOString() 
+    };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const a = document.createElement('a'); 
     a.href = URL.createObjectURL(blob); 
@@ -606,6 +613,26 @@ function importData(e) {
             portfolio = d.portfolio; 
             networthItems = d.networthItems; 
             appHistory = d.history || [];
+            
+            if (d.strategy) {
+                currentStrategy = d.strategy;
+                const select = document.getElementById('strategy-select');
+                if (select) select.value = d.strategy;
+                
+                const customSection = document.getElementById('custom-ratios');
+                if (customSection) customSection.classList.toggle('hidden', currentStrategy !== 'custom');
+            }
+            
+            if (d.customStrategy) {
+                STRATEGY_PRESETS.custom = d.customStrategy;
+                const ce = document.getElementById('custom-equity');
+                const cd = document.getElementById('custom-debt');
+                const cc = document.getElementById('custom-comm');
+                if (ce) ce.value = d.customStrategy.Equity || 50;
+                if (cd) cd.value = d.customStrategy.Debt || 30;
+                if (cc) cc.value = d.customStrategy.Commodity || 20;
+            }
+            
             renderPortfolio(); 
         }
     };
