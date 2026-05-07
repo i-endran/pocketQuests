@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viruthi Lite 📈 | Elegant Asset Tracker</title>
+
+    <!-- Favicon -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>💰</text></svg>"
+        type="image/svg+xml">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="min-h-screen pb-12">
+
+    <header class="sticky top-0 z-40 bg-white/70 backdrop-blur-md border-b border-slate-100">
+        <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                            d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                    </svg>
+                </div>
+                <h1 class="text-2xl font-bold tracking-tight text-slate-800">Viruthi Lite</h1>
+            </div>
+            <nav class="flex space-x-2 bg-slate-100 p-1.5 rounded-full">
+                <button onclick="navigate('portfolio')" id="nav-portfolio"
+                    class="nav-pill active text-sm font-semibold">Portfolio</button>
+                <button onclick="navigate('networth')" id="nav-networth"
+                    class="nav-pill text-sm font-semibold text-slate-500 hover:text-slate-700">Net Worth</button>
+                <button onclick="navigate('history')" id="nav-history"
+                    class="nav-pill text-sm font-semibold text-slate-500 hover:text-slate-700">History</button>
+            </nav>
+            <div class="flex items-center space-x-4">
+                <button onclick="saveToHistory()"
+                    class="hidden md:block text-xs font-bold text-indigo-500 hover:text-indigo-700 tracking-widest uppercase border border-indigo-100 bg-indigo-50 px-3 py-1.5 rounded-lg">Save
+                    to History</button>
+                <button onclick="exportData()"
+                    class="hidden md:block text-xs font-bold text-slate-400 hover:text-slate-600 tracking-widest uppercase">Export</button>
+                <label
+                    class="hidden md:block cursor-pointer text-xs font-bold text-slate-400 hover:text-slate-600 tracking-widest uppercase">
+                    Import <input type="file" id="importFile" class="hidden" accept=".json"
+                        onchange="importData(event)">
+                </label>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 mt-10">
+        <!-- PAGE: PORTFOLIO -->
+        <div id="page-portfolio" class="space-y-10 animate-fade-in">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div
+                    class="curvy-card p-8 flex flex-col justify-center bg-gradient-to-br from-indigo-600 to-blue-600 text-white shadow-indigo-200">
+                    <span class="text-indigo-100 text-xs font-bold uppercase tracking-widest mb-1">Portfolio
+                        Value</span>
+                    <h2 id="p-total-value" class="text-4xl font-bold">₹0</h2>
+                </div>
+                <div class="curvy-card p-8 flex flex-col justify-center">
+                    <span class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Top Asset Class</span>
+                    <h2 id="p-top-class" class="text-3xl font-bold text-slate-800">—</h2>
+                </div>
+                <div class="curvy-card p-8 flex flex-col justify-center">
+                    <span class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Items Tracked</span>
+                    <h2 id="p-asset-count" class="text-3xl font-bold text-slate-800">0 Items</h2>
+                </div>
+            </div>
+
+            <!-- NEW: Target Allocation Strategy Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-4 curvy-card p-8 bg-white border-indigo-100 border">
+                    <h3 class="text-lg font-bold text-slate-800 mb-6 flex items-center">
+                        <span class="w-2 h-6 bg-indigo-500 rounded-full mr-3"></span> Strategy Template
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label
+                                class="text-[10px] font-bold uppercase text-slate-400 mb-2 block tracking-wider">Select
+                                Strategy</label>
+                            <select id="strategy-select" class="w-full text-sm font-semibold"
+                                onchange="updateStrategy()">
+                                <option value="aggressive">Aggressive (70:20:10)</option>
+                                <option value="balanced" selected>Balanced (50:30:20)</option>
+                                <option value="conservative">Conservative (30:50:20)</option>
+                                <option value="custom">Custom Strategy</option>
+                            </select>
+                        </div>
+                        <div id="custom-ratios" class="hidden grid grid-cols-3 gap-2">
+                            <div>
+                                <label class="text-[9px] font-bold text-slate-400 uppercase">Equity %</label>
+                                <input type="number" id="custom-equity" class="w-full text-xs" value="50"
+                                    onchange="applyCustomStrategy()">
+                            </div>
+                            <div>
+                                <label class="text-[9px] font-bold text-slate-400 uppercase">Debt %</label>
+                                <input type="number" id="custom-debt" class="w-full text-xs" value="30"
+                                    onchange="applyCustomStrategy()">
+                            </div>
+                            <div>
+                                <label class="text-[9px] font-bold text-slate-400 uppercase">Comm %</label>
+                                <input type="number" id="custom-comm" class="w-full text-xs" value="20"
+                                    onchange="applyCustomStrategy()">
+                            </div>
+                        </div>
+                        <div class="p-4 bg-indigo-50/50 rounded-2xl">
+                            <p class="text-[11px] text-slate-500 leading-relaxed italic">
+                                <b>Growth (Equity)</b>: High risk, high return.<br>
+                                <b>Stability (Debt)</b>: Consistent income, low risk.<br>
+                                <b>Hedge (Comm)</b>: Inflation protection.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-8 curvy-card p-8">
+                    <h3 class="text-lg font-bold text-slate-800 mb-2 flex items-center justify-between">
+                        <div class="flex items-center">
+                            <span class="w-2 h-6 bg-emerald-500 rounded-full mr-3"></span> Current vs Target Alignment
+                        </div>
+                        <span id="rebalance-status"
+                            class="text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-tighter"></span>
+                    </h3>
+                    <div class="h-[240px] w-full">
+                        <canvas id="chart-strategy-delta"></canvas>
+                    </div>
+                    <div id="delta-recommendations" class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <!-- Dynamic Delta Cards -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Original Charts -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="curvy-card p-8">
+                    <h3 class="text-lg font-bold text-slate-800 mb-6 flex items-center">
+                        <span class="w-2 h-6 bg-indigo-500 rounded-full mr-3"></span> Asset Composition
+                    </h3>
+                    <div class="h-[300px] flex justify-center"><canvas id="chart-p-type"></canvas></div>
+                </div>
+                <div class="curvy-card p-8">
+                    <h3 class="text-lg font-bold text-slate-800 mb-6 flex items-center justify-between">
+                        <div class="flex items-center">
+                            <span class="w-2 h-6 bg-emerald-500 rounded-full mr-3"></span> Specific Holdings
+                        </div>
+                        <select id="holding-filter"
+                            class="text-xs font-semibold p-2 border-slate-200 rounded-xl bg-slate-50 cursor-pointer"
+                            onchange="applyHoldingFilter(this.value)">
+                            <option value="All" selected>All Categories</option>
+                            <option value="Equity">Equity</option>
+                            <option value="Commodity">Commodity</option>
+                            <option value="Debt">Debt</option>
+                            <option value="Real Estate">Real Estate</option>
+                            <option value="Cash">Cash</option>
+                        </select>
+                    </h3>
+                    <div class="h-[300px] flex justify-center"><canvas id="chart-p-label"></canvas></div>
+                </div>
+            </div>
+
+            <div class="curvy-card overflow-hidden">
+                <div class="p-8 border-b border-slate-100 flex justify-between items-center">
+                    <h3 class="text-xl font-bold text-slate-800">Portfolio Inventory</h3>
+                    <button onclick="toggleModal(true)"
+                        class="btn-hover bg-indigo-600 text-white w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4">
+                            </path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-slate-50/50 text-slate-400 text-[10px] uppercase tracking-widest font-bold">
+                            <tr>
+                                <th class="px-8 py-4">Asset Label</th>
+                                <th class="px-8 py-4">Type</th>
+                                <th class="px-8 py-4 text-right">Value (INR)</th>
+                                <th class="px-8 py-4 w-20"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="p-table-body" class="divide-y divide-slate-50"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE: NET WORTH -->
+        <div id="page-networth" class="hidden space-y-10 animate-fade-in">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                <div class="lg:col-span-2 curvy-card p-8 bg-slate-900 text-white">
+                    <div
+                        class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 border-b border-slate-700/50 pb-6">
+                        <div>
+                            <span class="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-1 block">True
+                                Net Worth</span>
+                            <h2 id="nw-total-value" class="text-4xl font-bold">₹0</h2>
+                        </div>
+                        <div class="sm:text-right">
+                            <span
+                                class="text-emerald-400/80 text-[10px] font-bold uppercase tracking-widest mb-1 block">FIRE
+                                Net Worth</span>
+                            <h2 id="nw-fire-value" class="text-2xl font-bold text-emerald-400">₹0</h2>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs">
+                        <div>
+                            <span class="text-slate-500 block mb-1">Working Capital</span>
+                            <span id="nw-sum-working-cap" class="text-blue-400 font-bold">₹0</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-500 block mb-1">Working Asset</span>
+                            <span id="nw-sum-working-asset" class="text-teal-400 font-bold">₹0</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-500 block mb-1">Frozen Net Worth</span>
+                            <span id="nw-sum-frozen-nw" class="text-purple-400 font-bold">₹0</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-500 block mb-1">Depreciatable Asset</span>
+                            <span id="nw-sum-depreciatable" class="text-orange-400 font-bold">₹0</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-500 block mb-1">Liabilities</span>
+                            <span id="nw-sum-loans" class="text-rose-400 font-bold">₹0</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:col-span-2 curvy-card p-8 flex items-center justify-center">
+                    <div class="h-[180px] w-full"><canvas id="chart-nw-ratio"></canvas></div>
+                </div>
+            </div>
+
+            <!-- NW Charts -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="curvy-card p-8">
+                    <h3 class="text-lg font-bold text-slate-800 mb-6 flex items-center">
+                        <span class="w-2 h-6 bg-indigo-500 rounded-full mr-3"></span> Asset Composition
+                    </h3>
+                    <div class="h-[300px] flex justify-center"><canvas id="chart-nw-type"></canvas></div>
+                </div>
+                <div class="curvy-card p-8">
+                    <h3 class="text-lg font-bold text-slate-800 mb-6 flex items-center justify-between">
+                        <div class="flex items-center">
+                            <span class="w-2 h-6 bg-emerald-500 rounded-full mr-3"></span> Specific Holdings
+                        </div>
+                        <select id="nw-holding-filter"
+                            class="text-xs font-semibold p-2 border-slate-200 rounded-xl bg-slate-50 cursor-pointer"
+                            onchange="applyNWHoldingFilter(this.value)">
+                            <option value="All" selected>All Categories</option>
+                            <option value="Invested Portfolio">Invested Portfolio</option>
+                            <option value="Real Estate">Real Estate</option>
+                            <option value="Physical Asset">Physical Asset</option>
+                            <option value="Depreciatable Asset">Depreciatable Asset</option>
+                        </select>
+                    </h3>
+                    <div class="h-[300px] flex justify-center"><canvas id="chart-nw-label"></canvas></div>
+                </div>
+            </div>
+
+            <div class="max-w-4xl mx-auto space-y-8">
+                <div class="curvy-card p-8 bg-white border-indigo-100 border">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-bold text-indigo-600">Invested Portfolio</h3>
+                        <span
+                            class="text-[10px] font-bold bg-indigo-50 text-indigo-600 px-2 py-1 rounded-md uppercase tracking-wider">Automated</span>
+                    </div>
+                    <div class="flex justify-between items-center pb-3 border-b border-slate-50">
+                        <span class="text-slate-600 text-sm font-medium">Securities & MFs</span>
+                        <span id="nw-portfolio-total" class="font-bold text-slate-800">₹0</span>
+                    </div>
+                    <button onclick="navigate('portfolio')"
+                        class="w-full mt-4 py-3 text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-xl transition-colors">Manage
+                        Portfolio</button>
+                </div>
+                <div class="curvy-card p-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-bold text-slate-800">Real Estate</h3><button
+                            onclick="addNWItem('realEstate')"
+                            class="text-xs font-bold bg-indigo-50 text-indigo-600 px-4 py-2 rounded-xl">Add
+                            Property</button>
+                    </div>
+                    <div id="nw-realestate-list" class="space-y-4"></div>
+                </div>
+                <div class="curvy-card p-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-bold text-slate-800">Physical Assets</h3><button
+                            onclick="addNWItem('asset')"
+                            class="text-xs font-bold bg-emerald-50 text-emerald-600 px-4 py-2 rounded-xl">Add
+                            Asset</button>
+                    </div>
+                    <div id="nw-assets-list" class="space-y-4"></div>
+                </div>
+                <div class="curvy-card p-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-bold text-slate-800">Depreciatable Assets</h3><button
+                            onclick="addNWItem('depreciatable')"
+                            class="text-xs font-bold bg-orange-50 text-orange-600 px-4 py-2 rounded-xl">Add
+                            Asset</button>
+                    </div>
+                    <div id="nw-depreciatable-list" class="space-y-4"></div>
+                </div>
+                <div class="curvy-card p-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-bold text-slate-800 text-rose-600">Liabilities</h3><button
+                            onclick="addNWItem('liability')"
+                            class="text-xs font-bold bg-rose-50 text-rose-600 px-4 py-2 rounded-xl">Add Loan</button>
+                    </div>
+                    <div id="nw-liabilities-list" class="space-y-4"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE: HISTORY -->
+        <div id="page-history" class="hidden space-y-10 animate-fade-in">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="curvy-card p-8">
+                    <h3 class="text-lg font-bold text-slate-800 mb-6 flex items-center">
+                        <span class="w-2 h-6 bg-indigo-500 rounded-full mr-3"></span> True vs FIRE Net Worth Growth
+                    </h3>
+                    <div class="h-[350px] flex justify-center"><canvas id="chart-h-networth"></canvas></div>
+                </div>
+                <div class="curvy-card p-8">
+                    <h3 class="text-lg font-bold text-slate-800 mb-6 flex items-center">
+                        <span class="w-2 h-6 bg-emerald-500 rounded-full mr-3"></span> Portfolio Growth
+                    </h3>
+                    <div class="h-[350px] flex justify-center"><canvas id="chart-h-portfolio"></canvas></div>
+                </div>
+            </div>
+
+            <div class="curvy-card p-8">
+                <h3 class="text-lg font-bold text-slate-800 mb-6 flex items-center">
+                    <span class="w-2 h-6 bg-purple-500 rounded-full mr-3"></span> Capital Distribution Over Time
+                </h3>
+                <div class="h-[400px] flex justify-center"><canvas id="chart-h-distribution"></canvas></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL -->
+    <div id="modal-container" class="hidden fixed inset-0 z-50 flex items-center justify-center p-6">
+        <div class="modal-overlay absolute inset-0" onclick="toggleModal(false)"></div>
+        <div class="curvy-card relative w-full max-w-md p-8 shadow-2xl">
+            <h2 class="text-2xl font-bold text-slate-800 mb-6">Add New Asset</h2>
+            <div class="space-y-5">
+                <div><label
+                        class="text-[10px] font-bold uppercase text-slate-400 mb-1 block tracking-wider">Category</label>
+                    <select id="m-type" class="w-full" onchange="toggleModalFields()">
+                        <option value="Equity">Equity (Growth)</option>
+                        <option value="Commodity">Commodity (Hedge)</option>
+                        <option value="Debt">Debt (Stability)</option>
+                        <option value="Cash">Cash</option>
+                    </select>
+                </div>
+                <div><label
+                        class="text-[10px] font-bold uppercase text-slate-400 mb-1 block tracking-wider">Label</label><input
+                        type="text" id="m-label" class="w-full" placeholder="e.g. Nifty 50 Index"></div>
+                <div id="m-std-fields" class="grid grid-cols-3 gap-3">
+                    <div class="col-span-2"><label
+                            class="text-[10px] font-bold uppercase text-slate-400 mb-1 block">Amount</label><input
+                            type="number" id="m-value" class="w-full"></div>
+                    <div><label
+                            class="text-[10px] font-bold uppercase text-slate-400 mb-1 block">Currency</label><select
+                            id="m-curr" class="w-full">
+                            <option value="INR">INR</option>
+                            <option value="USD">USD</option>
+                        </select></div>
+                </div>
+                <div id="m-commodity-fields" class="hidden grid grid-cols-2 gap-3">
+                    <div><label class="text-[10px] font-bold uppercase text-slate-400 mb-1 block">Weight</label><input
+                            type="number" id="m-weight" class="w-full"></div>
+                    <div><label class="text-[10px] font-bold uppercase text-slate-400 mb-1 block">Rate</label><input
+                            type="number" id="m-price" class="w-full"></div>
+                </div>
+                <div class="pt-4 flex gap-3"><button onclick="toggleModal(false)"
+                        class="flex-1 py-3 text-slate-400">Cancel</button><button onclick="saveAsset()"
+                        class="flex-1 bg-indigo-600 text-white py-3 rounded-2xl font-bold">Save</button></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="scripts.js"></script>
+    <script src="../assets/theme-toggle.js"></script>
+</body>
+
+</html>

@@ -24,6 +24,21 @@ Calculate fair market value for used cars in India with detailed depreciation an
 
 **Try it:** Open the project folder and launch `index.html` in your browser.
 
+### 📈 Viruthi Lite
+*Active*
+
+Elegant and dynamic web application for comprehensive asset tracking, portfolio management, and net worth calculation.
+
+**Features:**
+- Asset composition & target strategy alignment tracking
+- True net worth vs FIRE net worth calculations
+- Import / Export JSON capabilities for local data persistence
+- Historical growth charts
+
+**Location:** `viruthi_lite/index.html`
+
+**Try it:** Open the project folder and launch `index.html` in your browser.
+
 ## Project Structure
 
 ```
@@ -35,6 +50,11 @@ PocketQuests/
 ├── car_depreciation_calc/
 │   ├── index.html            # Car valuation tool
 │   └── car_depreciation.js   # Car calculator logic
+├── viruthi_lite/
+│   ├── index.html            # Portfolio manager
+│   ├── styles.css            # Styles
+│   ├── config.js             # Configuration constants
+│   └── scripts.js            # App logic
 └── LICENSE
 ```
 

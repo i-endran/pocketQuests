@@ -256,10 +256,18 @@ function updateChart(values, bestAge) {
 
     const labels = values.map((_, i) => `Year ${i}`);
     
+    const rootStyles = getComputedStyle(document.documentElement);
+    const primaryColor = rootStyles.getPropertyValue('--primary').trim() || '#ffffff';
+    const cardBg = rootStyles.getPropertyValue('--card-bg').trim() || '#0a0a0a';
+    const textLight = rootStyles.getPropertyValue('--text-light').trim() || '#ffffff';
+    const cardBorder = rootStyles.getPropertyValue('--card-border').trim() || '#1a1a1a';
+    const textMuted = rootStyles.getPropertyValue('--text-muted').trim() || '#737373';
+    const isDark = document.documentElement.classList.contains('dark');
+    
     // Create point styles array
-    const pointBackgroundColors = values.map((_, i) => i === bestAge ? '#10b981' : '#ffffff');
+    const pointBackgroundColors = values.map((_, i) => i === bestAge ? '#10b981' : cardBg);
     const pointRadiuses = values.map((_, i) => i === bestAge ? 8 : 4);
-    const pointBorderColors = values.map((_, i) => i === bestAge ? '#10b981' : '#e5e5e5');
+    const pointBorderColors = values.map((_, i) => i === bestAge ? '#10b981' : primaryColor);
     const pointBorderWidths = values.map((_, i) => i === bestAge ? 3 : 1);
 
     chartInstance = new Chart(ctx, {
@@ -269,8 +277,8 @@ function updateChart(values, bestAge) {
             datasets: [{
                 label: 'Car Value (₹)',
                 data: values,
-                borderColor: '#ffffff',
-                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                borderColor: primaryColor,
+                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)',
                 borderWidth: 2,
                 pointBackgroundColor: pointBackgroundColors,
                 pointRadius: pointRadiuses,
@@ -284,12 +292,12 @@ function updateChart(values, bestAge) {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                legend: { labels: { color: '#737373' } },
+                legend: { labels: { color: textMuted } },
                 tooltip: {
-                    backgroundColor: '#0a0a0a',
-                    titleColor: '#ffffff',
-                    bodyColor: '#e5e5e5',
-                    borderColor: '#1a1a1a',
+                    backgroundColor: cardBg,
+                    titleColor: textLight,
+                    bodyColor: textMuted,
+                    borderColor: cardBorder,
                     borderWidth: 1,
                     callbacks: {
                         label: function(context) {
@@ -307,9 +315,16 @@ function updateChart(values, bestAge) {
                 }
             },
             scales: {
-                y: { grid: { color: '#1a1a1a' }, ticks: { color: '#737373' } },
-                x: { grid: { color: '#1a1a1a' }, ticks: { color: '#737373' } }
+                y: { grid: { color: cardBorder }, ticks: { color: textMuted } },
+                x: { grid: { color: cardBorder }, ticks: { color: textMuted } }
             }
         }
     });
 }
+
+window.addEventListener('themeChanged', () => {
+    if (chartInstance) {
+        // Just re-run the calculation which will recreate the chart
+        calculateValuation();
+    }
+});
