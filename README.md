@@ -24,7 +24,7 @@ Calculate fair market value for used cars in India with detailed depreciation an
 
 **Try it:** Open the project folder and launch `index.html` in your browser.
 
-### 📈 Viruthi Lite
+### 💰 Viruthi Lite
 *Active*
 
 Elegant and dynamic web application for comprehensive asset tracking, portfolio management, and net worth calculation.
