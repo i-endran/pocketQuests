@@ -27,7 +27,8 @@ const centerTextPlugin = {
         const fontSize = Math.round(height / 10);
         ctx.font = "bold " + fontSize + "px Outfit, sans-serif";
         ctx.textBaseline = "middle";
-        ctx.fillStyle = "#1e293b"; 
+        const isDark = document.documentElement.classList.contains('dark');
+        ctx.fillStyle = isDark ? "#f8fafc" : "#1e293b"; 
         
         const textX = Math.round((width - ctx.measureText(text).width) / 2);
         const textY = height / 2 - (fontSize * 0.1);
@@ -35,7 +36,7 @@ const centerTextPlugin = {
         
         const subFontSize = Math.max(10, Math.round(fontSize * 0.4));
         ctx.font = "bold " + subFontSize + "px Outfit, sans-serif";
-        ctx.fillStyle = "#94a3b8";
+        ctx.fillStyle = isDark ? "#cbd5e1" : "#94a3b8";
         const subText = "TOTAL";
         const subTextX = Math.round((width - ctx.measureText(subText).width) / 2);
         ctx.fillText(subText, subTextX, textY + fontSize * 0.8);
@@ -754,3 +755,15 @@ function renderHistory() {
 }
 
 window.onload = () => renderPortfolio();
+
+window.addEventListener('themeChanged', () => {
+    if (Object.keys(charts).length > 0) {
+        renderPortfolio();
+        if (!document.getElementById('page-networth').classList.contains('hidden')) {
+            renderNetWorth();
+        }
+        if (!document.getElementById('page-history').classList.contains('hidden')) {
+            renderHistory();
+        }
+    }
+});

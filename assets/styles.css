@@ -28,35 +28,33 @@
     --range-thumb: #000000;
 }
 
-@media (prefers-color-scheme: dark) {
-    :root {
-        --primary: #ffffff;
-        --primary-dark: #e5e5e5;
-        --accent: #a3a3a3;
-        --bg-dark: #000000;
-        --card-bg: #0a0a0a;
-        --card-border: #1a1a1a;
-        --text-light: #ffffff;
-        --text-muted: #737373;
-        --success: #10b981;
-        --warning: #f59e0b;
-        --danger: #ef4444;
-        
-        --header-gradient-1: #1a1a1a;
-        --header-gradient-2: #0a0a0a;
-        --title-gradient-1: #ffffff;
-        --title-gradient-2: #e5e5e5;
-        --btn-gradient-1: #ffffff;
-        --btn-gradient-2: #e5e5e5;
-        --btn-gradient-hover-1: #e5e5e5;
-        --btn-gradient-hover-2: #d4d4d4;
-        --btn-text: #000000;
-        --input-bg: #000000;
-        --input-border: #262626;
-        --range-track: #404040;
-        --range-track-border: #595959;
-        --range-thumb: #ffffff;
-    }
+html.dark {
+    --primary: #ffffff;
+    --primary-dark: #e5e5e5;
+    --accent: #a3a3a3;
+    --bg-dark: #000000;
+    --card-bg: #0a0a0a;
+    --card-border: #1a1a1a;
+    --text-light: #ffffff;
+    --text-muted: #737373;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    
+    --header-gradient-1: #1a1a1a;
+    --header-gradient-2: #0a0a0a;
+    --title-gradient-1: #ffffff;
+    --title-gradient-2: #e5e5e5;
+    --btn-gradient-1: #ffffff;
+    --btn-gradient-2: #e5e5e5;
+    --btn-gradient-hover-1: #e5e5e5;
+    --btn-gradient-hover-2: #d4d4d4;
+    --btn-text: #000000;
+    --input-bg: #000000;
+    --input-border: #262626;
+    --range-track: #404040;
+    --range-track-border: #595959;
+    --range-thumb: #ffffff;
 }
 
 * {
@@ -88,10 +86,8 @@ header {
     border: 1px solid var(--card-border);
 }
 
-@media (prefers-color-scheme: dark) {
-    header {
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-    }
+html.dark header {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
 }
 
 h1 {
@@ -137,10 +133,8 @@ h1 {
     cursor: pointer;
 }
 
-@media (prefers-color-scheme: dark) {
-    .project-card {
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
-    }
+html.dark .project-card {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
 }
 
 .project-card:hover {
@@ -150,15 +144,13 @@ h1 {
     border-color: var(--accent);
 }
 
-@media (prefers-color-scheme: dark) {
-    .project-card:hover {
-        background: rgba(26, 26, 26, 0.8);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
-        filter: none;
-        border-color: rgba(255, 255, 255, 0.15);
-    }
+html.dark .project-card:hover {
+    background: rgba(26, 26, 26, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+    filter: none;
+    border-color: rgba(255, 255, 255, 0.15);
 }
 
 .project-emoji {
@@ -242,14 +234,10 @@ footer p { margin-bottom: 10px; }
 
 /* Car depreciation calculator specific styles */
 .card { background-color: var(--card-bg); border-radius: 16px; padding: 24px; margin-bottom: 24px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); border: 1px solid var(--card-border); transition: all 0.3s ease; }
-@media (prefers-color-scheme: dark) {
-    .card { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5); }
-}
+html.dark .card { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5); }
 
 .card:hover { transform: translateY(-4px); border-color: var(--accent); filter: brightness(0.98); }
-@media (prefers-color-scheme: dark) {
-    .card:hover { background: rgba(26,26,26,0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.6); filter: none; border-color: rgba(255,255,255,0.15); }
-}
+html.dark .card:hover { background: rgba(26,26,26,0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.6); filter: none; border-color: rgba(255,255,255,0.15); }
 
 .form-group { margin-bottom: 25px; }
 label { display: flex; justify-content: space-between; margin-bottom: 12px; color: var(--text-muted); font-weight: 500; }
@@ -258,9 +246,7 @@ label { display: flex; justify-content: space-between; margin-bottom: 12px; colo
 input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
 input[type=range]:focus { outline: none; }
 input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%; background: var(--range-thumb); cursor: pointer; margin-top: -8px; box-shadow: 0 0 5px rgba(0,0,0,0.3); transition: transform 0.1s; }
-@media (prefers-color-scheme: dark) {
-    input[type=range]::-webkit-slider-thumb { box-shadow: 0 0 5px rgba(255,255,255,0.3); }
-}
+html.dark input[type=range]::-webkit-slider-thumb { box-shadow: 0 0 5px rgba(255,255,255,0.3); }
 
 input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
 input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 6px; cursor: pointer; background: var(--range-track); border-radius: 3px; border: 1px solid var(--range-track-border); }
@@ -269,9 +255,7 @@ input[type=range]::-moz-range-thumb { height: 20px; width: 20px; border-radius: 
 
 input[type=number], input[type=text], select { width: 100%; padding: 12px; background-color: var(--input-bg); border: 1px solid var(--input-border); border-radius: 8px; color: var(--text-light); font-size: 1rem; transition: border-color 0.2s; box-sizing: border-box; }
 input[type=text]:focus, input[type=number]:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(0,0,0,0.1); }
-@media (prefers-color-scheme: dark) {
-    input[type=text]:focus, input[type=number]:focus, select:focus { box-shadow: 0 0 0 2px rgba(255,255,255,0.1); }
-}
+html.dark input[type=text]:focus, html.dark input[type=number]:focus, html.dark select:focus { box-shadow: 0 0 0 2px rgba(255,255,255,0.1); }
 
 button { width: 100%; padding: 14px; background: linear-gradient(135deg, var(--btn-gradient-1) 0%, var(--btn-gradient-2) 100%); color: var(--btn-text); border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: transform 0.1s, opacity 0.2s, background 0.3s; }
 button:hover { background: linear-gradient(135deg, var(--btn-gradient-hover-1) 0%, var(--btn-gradient-hover-2) 100%); transform: translateY(-1px); }
