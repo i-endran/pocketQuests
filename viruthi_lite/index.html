@@ -5,12 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Viruthi Lite 📈 | Elegant Asset Tracker</title>
-    
+
     <!-- Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>📈</text></svg>" type="image/svg+xml">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>💰</text></svg>"
+        type="image/svg+xml">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
@@ -39,7 +42,8 @@
             </nav>
             <div class="flex items-center space-x-4">
                 <button onclick="saveToHistory()"
-                    class="hidden md:block text-xs font-bold text-indigo-500 hover:text-indigo-700 tracking-widest uppercase border border-indigo-100 bg-indigo-50 px-3 py-1.5 rounded-lg">Save to History</button>
+                    class="hidden md:block text-xs font-bold text-indigo-500 hover:text-indigo-700 tracking-widest uppercase border border-indigo-100 bg-indigo-50 px-3 py-1.5 rounded-lg">Save
+                    to History</button>
                 <button onclick="exportData()"
                     class="hidden md:block text-xs font-bold text-slate-400 hover:text-slate-600 tracking-widest uppercase">Export</button>
                 <label
@@ -147,7 +151,9 @@
                         <div class="flex items-center">
                             <span class="w-2 h-6 bg-emerald-500 rounded-full mr-3"></span> Specific Holdings
                         </div>
-                        <select id="holding-filter" class="text-xs font-semibold p-2 border-slate-200 rounded-xl bg-slate-50 cursor-pointer" onchange="applyHoldingFilter(this.value)">
+                        <select id="holding-filter"
+                            class="text-xs font-semibold p-2 border-slate-200 rounded-xl bg-slate-50 cursor-pointer"
+                            onchange="applyHoldingFilter(this.value)">
                             <option value="All" selected>All Categories</option>
                             <option value="Equity">Equity</option>
                             <option value="Commodity">Commodity</option>
@@ -191,17 +197,21 @@
         <div id="page-networth" class="hidden space-y-10 animate-fade-in">
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
                 <div class="lg:col-span-2 curvy-card p-8 bg-slate-900 text-white">
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 border-b border-slate-700/50 pb-6">
+                    <div
+                        class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 border-b border-slate-700/50 pb-6">
                         <div>
-                            <span class="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-1 block">True Net Worth</span>
+                            <span class="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-1 block">True
+                                Net Worth</span>
                             <h2 id="nw-total-value" class="text-4xl font-bold">₹0</h2>
                         </div>
                         <div class="sm:text-right">
-                            <span class="text-emerald-400/80 text-[10px] font-bold uppercase tracking-widest mb-1 block">FIRE Net Worth</span>
+                            <span
+                                class="text-emerald-400/80 text-[10px] font-bold uppercase tracking-widest mb-1 block">FIRE
+                                Net Worth</span>
                             <h2 id="nw-fire-value" class="text-2xl font-bold text-emerald-400">₹0</h2>
                         </div>
                     </div>
-                    
+
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs">
                         <div>
                             <span class="text-slate-500 block mb-1">Working Capital</span>
@@ -243,7 +253,9 @@
                         <div class="flex items-center">
                             <span class="w-2 h-6 bg-emerald-500 rounded-full mr-3"></span> Specific Holdings
                         </div>
-                        <select id="nw-holding-filter" class="text-xs font-semibold p-2 border-slate-200 rounded-xl bg-slate-50 cursor-pointer" onchange="applyNWHoldingFilter(this.value)">
+                        <select id="nw-holding-filter"
+                            class="text-xs font-semibold p-2 border-slate-200 rounded-xl bg-slate-50 cursor-pointer"
+                            onchange="applyNWHoldingFilter(this.value)">
                             <option value="All" selected>All Categories</option>
                             <option value="Invested Portfolio">Invested Portfolio</option>
                             <option value="Real Estate">Real Estate</option>
@@ -274,7 +286,8 @@
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-lg font-bold text-slate-800">Real Estate</h3><button
                             onclick="addNWItem('realEstate')"
-                            class="text-xs font-bold bg-indigo-50 text-indigo-600 px-4 py-2 rounded-xl">Add Property</button>
+                            class="text-xs font-bold bg-indigo-50 text-indigo-600 px-4 py-2 rounded-xl">Add
+                            Property</button>
                     </div>
                     <div id="nw-realestate-list" class="space-y-4"></div>
                 </div>
@@ -291,7 +304,8 @@
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-lg font-bold text-slate-800">Depreciatable Assets</h3><button
                             onclick="addNWItem('depreciatable')"
-                            class="text-xs font-bold bg-orange-50 text-orange-600 px-4 py-2 rounded-xl">Add Asset</button>
+                            class="text-xs font-bold bg-orange-50 text-orange-600 px-4 py-2 rounded-xl">Add
+                            Asset</button>
                     </div>
                     <div id="nw-depreciatable-list" class="space-y-4"></div>
                 </div>
@@ -322,7 +336,7 @@
                     <div class="h-[350px] flex justify-center"><canvas id="chart-h-portfolio"></canvas></div>
                 </div>
             </div>
-            
+
             <div class="curvy-card p-8">
                 <h3 class="text-lg font-bold text-slate-800 mb-6 flex items-center">
                     <span class="w-2 h-6 bg-purple-500 rounded-full mr-3"></span> Capital Distribution Over Time
